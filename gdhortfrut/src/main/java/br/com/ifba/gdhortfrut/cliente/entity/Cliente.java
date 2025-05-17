@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 public class Cliente extends Pessoa {
 
 }
