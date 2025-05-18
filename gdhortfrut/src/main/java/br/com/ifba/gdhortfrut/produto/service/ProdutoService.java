@@ -10,7 +10,11 @@ import java.util.Optional;
 @Service
 public class ProdutoService {
 
-    private ProdutoRepository produtosRepository;
+    private final ProdutoRepository produtosRepository;
+
+    public ProdutoService(ProdutoRepository produtosRepository) {
+        this.produtosRepository = produtosRepository;
+    }
 
     public Produto save(Produto produtos) {
         return produtosRepository.save(produtos);
@@ -21,7 +25,7 @@ public class ProdutoService {
         produto.setNome(produtoAtualizado.getNome());
         produto.setDescricao(produtoAtualizado.getDescricao());
         produto.setPreco(produtoAtualizado.getPreco());
-        return produtosRepository.save(produtoAtualizado);
+        return produtosRepository.save(produto);
     }
 
     public void delete(Long id) {

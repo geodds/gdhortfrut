@@ -10,18 +10,24 @@ import java.util.Optional;
 @Service
 public class ClienteService {
 
-    private ClienteRepository clienteRepository;
+    private final ClienteRepository clienteRepository;
+
+    public ClienteService(ClienteRepository clienteRepository) {
+        this.clienteRepository = clienteRepository;
+    }
 
     public Cliente save( Cliente cliente){
         return clienteRepository.save(cliente);
     }
 
     public Cliente update( Cliente clienteAtualizado, Long id){
-        Cliente cliente = clienteRepository.findById(id).orElseThrow();
+        Cliente cliente = clienteRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Cliente nao econtrado com o id: "+ id));
+
         cliente.setNome(clienteAtualizado.getNome());
         cliente.setCpf(clienteAtualizado.getCpf());
         cliente.setTelefone( clienteAtualizado.getTelefone());
-        return clienteRepository.save(clienteAtualizado);
+        return clienteRepository.save(cliente);
     }
 
     public void delete( Long id){
