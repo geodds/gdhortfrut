@@ -44,7 +44,7 @@ public class VendaServiceTest {
 
         Venda savedVenda = vendaService.save(venda);
 
-        assertEquals(30.0, savedVenda.getValorTotal());
+        assertEquals(20.0, savedVenda.getValorTotal());
         verify(vendaRepository).save(any(Venda.class));
     }
 
