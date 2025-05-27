@@ -2,6 +2,7 @@ package br.com.ifba.gdhortfrut.vendas.service;
 
 import br.com.ifba.gdhortfrut.produto.entity.Produto;
 import br.com.ifba.gdhortfrut.produto.repository.ProdutoRepository;
+import br.com.ifba.gdhortfrut.vendas.dto.VendaRequest;
 import br.com.ifba.gdhortfrut.vendas.entity.Venda;
 import br.com.ifba.gdhortfrut.vendas.repository.VendaRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -21,43 +22,49 @@ public class VendaService {
         this.produtoRepository = produtoRepository;
     }
 
-    public Venda save(Venda venda) {
-        Produto produto = produtoRepository.findById(venda.getProduto().getId())
+    public Venda save(VendaRequest request) {
+        Produto produto = produtoRepository.findById(request.getProdutoId())
                 .orElseThrow(() -> new EntityNotFoundException("Produto nao econtrado."));
 
-        double preco = produto.getPreco();
-        int quantidade = venda.getQuantidade();
+        Venda venda = new Venda();
+        venda.setProduto(produto);
+        venda.setQuantidade(venda.getQuantidade());
 
-        /*/verifica se a quantidade eh menor que 0
-        if (quantidade <= 0) {
-            throw new IllegalArgumentException("A quantidade deve ser maior que zero.");
-        }*/
+        //venda.setProduto(produto);
+
+       /* double preco = produto.getPreco();
+        int quantidade = venda.getQuantidade();*/
 
         //calculando valor total
-        double valorTotal = preco * quantidade;
+        double valorTotal = produto.getPreco() * request.getProdutoId();
         venda.setValorTotal(valorTotal);
 
         return vendasRepository.save(venda);
     }
 
-    public Venda update(Venda venda, Long id) {
-        if (venda.getId() == null) {
+    public Venda update(Long id, VendaRequest request) {
+        /*if (venda.getId() == null) {
             throw new IllegalArgumentException("O ID da venda não pode ser nulo.");
         }
 
         Venda vendaExistente = vendasRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Venda nao econtrada."));
+*/
+
+        Venda vendaExistente = vendasRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Venda nao econtrada."));
 
         //buscando produto do banco
-        Produto produtoAtualizado = produtoRepository.findById(venda.getProduto().getId())
+        Produto produto = produtoRepository.findById(request.getProdutoId())
                         .orElseThrow(() -> new EntityNotFoundException("Produto nao econtrado."));
 
-        vendaExistente.setProduto(produtoAtualizado);
-        vendaExistente.setQuantidade(venda.getQuantidade());
+        vendaExistente.setProduto(produto);
+        vendaExistente.setQuantidade(request.getQuantidade());
+        vendaExistente.setValorTotal(produto.getPreco() * request.getProdutoId());
 
         //atualizando valor total
-        double valorTotalAtualizado = produtoAtualizado.getPreco() * vendaExistente.getQuantidade();
-        vendaExistente.setValorTotal(valorTotalAtualizado);
+        /*double valorTotalAtualizado = produtoAtualizado.getPreco() * vendaExistente.getQuantidade();
+        vendaExistente.setValorTotal(valorTotalAtualizado);*/
 
         return vendasRepository.save(vendaExistente);
     }

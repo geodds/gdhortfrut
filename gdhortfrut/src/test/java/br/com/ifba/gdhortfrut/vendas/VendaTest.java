@@ -2,6 +2,7 @@ package br.com.ifba.gdhortfrut.vendas;
 
 import br.com.ifba.gdhortfrut.produto.entity.Produto;
 import br.com.ifba.gdhortfrut.produto.repository.ProdutoRepository;
+import br.com.ifba.gdhortfrut.vendas.dto.VendaRequest;
 import br.com.ifba.gdhortfrut.vendas.entity.Venda;
 import br.com.ifba.gdhortfrut.vendas.repository.VendaRepository;
 import br.com.ifba.gdhortfrut.vendas.service.VendaService;
@@ -38,10 +39,12 @@ public class VendaTest {
         produto.setId(1L);
         produto.setPreco(10.0);
 
-        // Cria uma venda associada a esse produto, com quantidade 3
+        VendaRequest venda = new VendaRequest(1L, 2);
+
+        /*/ Cria uma venda associada a esse produto, com quantidade 3
         Venda venda = new Venda();
         venda.setProduto(produto);
-        venda.setQuantidade(3);
+        venda.setQuantidade(3);*/
 
         // Simula o retorno do produto existente no repositório de produtos
         when(produtoRepository.findById(1L)).thenReturn(Optional.of(produto));
@@ -59,18 +62,23 @@ public class VendaTest {
 
     @Test
     void testSaveVendaComProdutoInvalido() {
-        // Cria uma venda com um produto cujo ID não existe
+        /*/ Cria uma venda com um produto cujo ID não existe
         Venda venda = new Venda();
         Produto produto = new Produto();
         produto.setId(99L); // ID inexistente
         venda.setProduto(produto);
-        venda.setQuantidade(2);
+        venda.setQuantidade(2);*/
+
+        VendaRequest venda = new VendaRequest(99L,2);
 
         // Simula o repositório de produtos não encontrar esse produto
         when(produtoRepository.findById(99L)).thenReturn(Optional.empty());
 
         // Espera que salvar a venda lance uma exceção por produto inválido
         assertThrows(RuntimeException.class, () -> vendaService.save(venda));
+
+        // Verifica que o método save do repository não foi chamado
+        verify(vendaRepository, never()).save(any(Venda.class));
     }
 
     @Test
@@ -92,11 +100,13 @@ public class VendaTest {
         vendaAntiga.setQuantidade(2);
         vendaAntiga.setValorTotal(10.0);
 
-        // Venda com dados atualizados: produto novo e quantidade 4
+        VendaRequest venda = new VendaRequest(2L, 4);
+
+        /*/ Venda com dados atualizados: produto novo e quantidade 4
         Venda vendaAtualizada = new Venda();
         vendaAtualizada.setId(1L);
         vendaAtualizada.setProduto(produtoNovo);
-        vendaAtualizada.setQuantidade(4);
+        vendaAtualizada.setQuantidade(4);*/
 
         // Simula buscas no repositório para produto e venda antigos/novos
         when(vendaRepository.findById(1L)).thenReturn(Optional.of(vendaAntiga));
@@ -105,7 +115,7 @@ public class VendaTest {
         when(vendaRepository.save(any(Venda.class))).thenAnswer(i -> i.getArgument(0));
 
         // Chama o método update no serviço com os dados atualizados
-        Venda updated = vendaService.update(vendaAtualizada, 1L);
+        Venda updated = vendaService.update(1L, venda);
 
         // Verifica se a venda atualizada tem o produto novo, quantidade e valor total corretos
         assertEquals(produtoNovo, updated.getProduto());
