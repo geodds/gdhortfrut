@@ -28,7 +28,7 @@ public class VendaService {
 
         Venda venda = new Venda();
         venda.setProduto(produto);
-        venda.setQuantidade(venda.getQuantidade());
+        venda.setQuantidade(request.getQuantidade());
 
         //venda.setProduto(produto);
 
@@ -36,7 +36,7 @@ public class VendaService {
         int quantidade = venda.getQuantidade();*/
 
         //calculando valor total
-        double valorTotal = produto.getPreco() * request.getProdutoId();
+        double valorTotal = produto.getPreco() * request.getQuantidade();
         venda.setValorTotal(valorTotal);
 
         return vendasRepository.save(venda);
@@ -60,7 +60,7 @@ public class VendaService {
 
         vendaExistente.setProduto(produto);
         vendaExistente.setQuantidade(request.getQuantidade());
-        vendaExistente.setValorTotal(produto.getPreco() * request.getProdutoId());
+        vendaExistente.setValorTotal(produto.getPreco() * request.getQuantidade());
 
         //atualizando valor total
         /*double valorTotalAtualizado = produtoAtualizado.getPreco() * vendaExistente.getQuantidade();
