@@ -1,5 +1,6 @@
 package br.com.ifba.gdhortfrut.vendas.entity;
 
+import br.com.ifba.gdhortfrut.cliente.entity.Cliente;
 import br.com.ifba.gdhortfrut.infrastructure.entity.PersistenceEntity;
 import br.com.ifba.gdhortfrut.produto.entity.Produto;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -26,6 +27,10 @@ public class Venda extends PersistenceEntity {
     @ManyToOne
     @JoinColumn(name = "produto_id")
     private Produto produto;
+
+    @ManyToOne
+    @JoinColumn(name = "cliente_id")
+    private Cliente cliente;
 
     private int quantidade;
     private double valorTotal;

@@ -38,8 +38,4 @@ public class ClienteController {
         return clienteService.findAll();
     }
 
-    @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id){
-        clienteService.delete(id);
-    }
 }

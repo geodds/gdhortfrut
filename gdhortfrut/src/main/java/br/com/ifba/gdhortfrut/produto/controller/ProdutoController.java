@@ -38,9 +38,5 @@ public class ProdutoController {
         return produtoService.findAll();
     }
 
-    @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) {
-        produtoService.delete(id);
-    }
 
 }
