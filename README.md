@@ -1,2 +1,2 @@
 # gdhortfrut
-Projeto para materia de Engenharia 2 do curso de ADS IFBA
+Projeto para materia de Engenharia 2 e Padroes de Proejto do curso de ADS IFBA
